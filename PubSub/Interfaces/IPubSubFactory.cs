@@ -7,8 +7,11 @@ namespace PubSub.Interfaces
         IPublisher GetPublisher();
         ISubscriptionHandler GetSubscriptionHandler();
 
+
         IPubSubFactory<T> IgnoreCallbackException();
         IPubSubFactory<T> FireAndForgetCallback();
+        IPubSubFactory<T> InvokeCallbackFunctionsSimultaneously();
     }
+
     public interface IPubSubFactory : IPubSubFactory<DefaultChannel> { }
 }

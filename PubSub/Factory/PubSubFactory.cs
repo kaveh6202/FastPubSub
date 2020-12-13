@@ -1,6 +1,5 @@
 ﻿using PubSub.Channels;
 using PubSub.Interfaces;
-using PubSub.Model;
 using System;
 using System.Collections.Generic;
 
@@ -26,6 +25,11 @@ namespace PubSub
         public IPubSubFactory<T> FireAndForgetCallback()
         {
             ((BaseChannel)_channels[typeof(T)]).Config.FireAndForgetCallback = true;
+            return this;
+        }
+        public IPubSubFactory<T> InvokeCallbackFunctionsSimultaneously()
+        {
+            ((BaseChannel)_channels[typeof(T)]).Config.InvokeCallbackFunctionsSimultaneously = true;
             return this;
         }
 

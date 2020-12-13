@@ -45,7 +45,7 @@ namespace PubSub
             //get all handlers
             var handlers = _subscribers.Select(i => i.Value).Where(i => i.Type == null || i.Type.Equals(typeof(T)));
 
-            if (Config.FireAndForgetCallback)
+            if (Config.InvokeCallbackFunctionsSimultaneously)
             {
                 Parallel.ForEach(handlers, h =>
                 {
@@ -141,7 +141,6 @@ namespace PubSub
 
 
         #endregion
-
     }
 
 }
