@@ -19,6 +19,17 @@ var publisher = factory.GetPublisher();
 publisher.Publish("Hello World!");
 ```
 
+### Subscription Filters
+you are able to filter the messages based on their types
+```c#
+ _subscribable.Subscribe<SomeType>(this, item => {//do some thing with the message});
+```
+using a filter function for more specific filtering
+```c#
+_subscribable.Subscribe<SomeType>(this, item => {//do some thing with the message},item=>item.Value == 2);
+```
+
+
 ## Get IPublisher 
 to publish messages to Channel
 ```c#
