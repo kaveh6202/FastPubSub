@@ -1,5 +1,4 @@
 ﻿using PubSub.Interfaces;
-using PubSub.Model;
 using System;
 using System.Collections.Concurrent;
 using System.Linq;
@@ -10,8 +9,7 @@ namespace PubSub
 
     public abstract class BaseChannel : IChannel
     {
-        private ConcurrentDictionary<string, Subscriber> _subscribers;
-        public ConcurrentDictionary<string, Subscriber> Subscribers { get { return _subscribers; } }
+        protected ConcurrentDictionary<string, Subscriber> _subscribers;
         public ConfigurationModel Config { get; set; }
 
 
@@ -23,14 +21,14 @@ namespace PubSub
 
         #region Subscription
 
-        public virtual string Subscribe<T>(Action<T> callback, Func<T, bool> filter = null) => Subscription(this, callback, typeof(T), filter);
-        public virtual string Subscribe<T>(object sender, Action<T> callback, Func<T, bool>? filter = null) => Subscription(sender, callback, typeof(T), filter);
+        public string Subscribe<T>(Action<T> callback, Func<T, bool> filter = null) => Subscription(this, callback, typeof(T), filter);
+        public string Subscribe<T>(object sender, Action<T> callback, Func<T, bool>? filter = null) => Subscription(sender, callback, typeof(T), filter);
 
-        public virtual string Subscribe(Action<object> callback) => Subscription(this, callback);
-        public virtual string Subscribe(object sender, Action<object> callback) => Subscription(sender, callback);
+        public string Subscribe(Action<object> callback) => Subscription(this, callback);
+        public string Subscribe(object sender, Action<object> callback) => Subscription(sender, callback);
 
 
-        public virtual void UnSubscribe<T>(string key)
+        public void UnSubscribe<T>(string key)
         {
             while (!_subscribers.TryRemove(key, out _)) { }
         }
@@ -39,7 +37,7 @@ namespace PubSub
 
         #region Publish
 
-        public virtual void Publish<T>(T input = default(T))
+        public void Publish<T>(T input = default(T))
         {
 
             RefreshSubsribers();
@@ -141,38 +139,15 @@ namespace PubSub
             }
         }
 
-        void IPublisher.Publish<T>(T input)
-        {
-            throw new NotImplementedException();
-        }
-
-        string ISubscriptionHandler.Subscribe(Action<object> callback)
-        {
-            throw new NotImplementedException();
-        }
-
-        string ISubscriptionHandler.Subscribe(object sender, Action<object> callback)
-        {
-            throw new NotImplementedException();
-        }
-
-        string ISubscriptionHandler.Subscribe<T>(Action<T> callback, Func<T, bool> filter)
-        {
-            throw new NotImplementedException();
-        }
-
-        string ISubscriptionHandler.Subscribe<T>(object sender, Action<T> callback, Func<T, bool> filter)
-        {
-            throw new NotImplementedException();
-        }
-
-        void ISubscriptionHandler.UnSubscribe<T>(string key)
-        {
-            throw new NotImplementedException();
-        }
-
-
         #endregion
+
+        protected class Subscriber
+        {
+            public Delegate Action { get; set; }
+            public Type Type { get; set; }
+            public WeakReference Sender { get; set; }
+            public Delegate Filter { get; set; }
+        }
     }
 
 }
