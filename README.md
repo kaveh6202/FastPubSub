@@ -15,26 +15,26 @@ var factory = new PubSubFactory().FireAndForgetCallback().IgnoreCallbackExceptio
 ## Get ISubscriptionHandler 
 to subscribe messages to Channel
 ```c#
-var publisher = factory.GetPublisher();
-publisher.Publish("Hello World!");
+var subscriptionHandler = factory.GetSubscriptionHandler();
+subscriptionHandler.Subscribe(item => { //do something with recieved message });
 ```
 
 ### Subscription Filters
 you are able to filter the messages based on their types
 ```c#
- _subscribable.Subscribe<SomeType>(this, item => {//do some thing with the message});
+ subscriptionHandler.Subscribe<SomeType>(this, item => {//do some thing with the message});
 ```
 using a filter function for more specific filtering
 ```c#
-_subscribable.Subscribe<SomeType>(this, item => {//do some thing with the message},item=>item.Value == 2);
+subscriptionHandler.Subscribe<SomeType>(this, item => {//do some thing with the message},item=>item.Value == 2);
 ```
 
 
 ## Get IPublisher 
 to publish messages to Channel
 ```c#
-var subscriptionHandler = factory.GetSubscriptionHandler();
-subscriptionHandler.Subscribe(item => { //do something with recieved message });
+var publisher = factory.GetPublisher();
+publisher.Publish("Hello World!");
 ```
 ***
 
