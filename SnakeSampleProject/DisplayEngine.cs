@@ -8,11 +8,25 @@ namespace SnakeSampleProject
     {
         private static object _locker = new object();
         private static List<Tile> LastBoardTiles;
+        static int top;
+        static int left;
+        public static void Reset()
+        {
+            LastBoardTiles = null;
+            var s = new string(Enumerable.Range(0, 100).Select(i => ' ').ToArray());
+            Write(s);
+            top = 0;
+            left = 0;
+        }
+        public static void Write(string message)
+        {
+            Console.SetCursorPosition(left, top);
+            Console.Write(message);
+        }
         public static void Draw(Board board)
         {
             lock (_locker)
             {
-
                 if (LastBoardTiles != null)
                 {
                     //draw diff 
@@ -57,7 +71,8 @@ namespace SnakeSampleProject
                     }
                     Console.WriteLine();
                 }
-
+                top = Console.CursorTop;
+                left = Console.CursorLeft;
                 LastBoardTiles = tiles.ToList() ;
             }
             //}

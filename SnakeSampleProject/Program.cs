@@ -16,34 +16,44 @@ namespace SnakeSampleProject
             InitLogger();
             InitializePubSubChannels();
 
-//            _subscribable.Subscribe<BoardCreated>(item => { 
-//                Log.Logger.Information(@$"
-//New Game Created -- Enjoy :)
-//Board Size - Width : {item.Width} ,Height : {item.Height}
-//Snake Head : {item.SnakeHead}
-//Snake Size : {item.SnakeSize}
-//Reward Location : {item.Reward}
-//-------------------------------
-//");
-//            });
+            bool gameOver = false;
+            _subscribable.Subscribe<GameOver>(item =>
+            {
+                DisplayEngine.Write("GAME OVER! press Space to restart");
+                gameOver = true;
+            });
 
             var snake = new Snake(_publisher, _subscribable);
             var board = new Board(_publisher, _subscribable, snake, Log.Logger);
-            board.Init(50, 20);
+            board.Init(60, 30);
 
             while (true)
             {
                 var key = Console.ReadKey().Key;
-                var direction = key switch
+                if (gameOver)
                 {
-                    ConsoleKey.RightArrow => SnakeDirection.Right,
-                    ConsoleKey.LeftArrow => SnakeDirection.Left,
-                    ConsoleKey.UpArrow => SnakeDirection.Up,
-                    ConsoleKey.DownArrow => SnakeDirection.Down,
-                };
-                board.Snake.ChangeDirection(direction);
+                    if (key == ConsoleKey.Spacebar)
+                    {
+                        gameOver = false;
+                        DisplayEngine.Reset();
+                        board.Reset();
+
+                    }
+                }
+                else
+                {
+
+                    var direction = key switch
+                    {
+                        ConsoleKey.RightArrow => SnakeDirection.Right,
+                        ConsoleKey.LeftArrow => SnakeDirection.Left,
+                        ConsoleKey.UpArrow => SnakeDirection.Up,
+                        ConsoleKey.DownArrow => SnakeDirection.Down,
+                    };
+                    board.Snake.ChangeDirection(direction);
+                }
             }
-            
+
         }
 
 

@@ -61,6 +61,11 @@ namespace SnakeSampleProject
             });
         }
 
+        internal void Reset()
+        {
+            Init(Width, Height);
+        }
+
         private bool IntersectReward(Tile head)
         {
             return head.Equals(Reward);
@@ -68,7 +73,7 @@ namespace SnakeSampleProject
 
         private bool IntersectObstacle(Tile head)
         {
-            return (head.PosX == 0 || head.PosX == Width || head.PosY == 0 || head.PosY == Height);
+            return (head.PosX == 0 || head.PosX == Width - 1 || head.PosY == 0 || head.PosY == Height - 1);
         }
 
         private void NewReward()
@@ -76,11 +81,12 @@ namespace SnakeSampleProject
             var tiles = CreateTiles(this);
             while (true)
             {
-                var rndx = new Random((int)DateTime.Now.Ticks).Next(1, Width - 1);
-                var rndy = new Random((int)DateTime.Now.Ticks + 5).Next(1, Height - 1);
+                var rndx = new Random((int)DateTime.Now.Ticks).Next(2, Width - 2);
+                var rndy = new Random((int)DateTime.Now.Ticks + 5).Next(2, Height - 2);
 
                 var tile = tiles.FirstOrDefault(i => i.Equal(rndx, rndy));
-                if (tile.TileObj == TileType.Blank) {
+                if (tile.TileObj == TileType.Blank)
+                {
                     Reward = tile;
                     break;
                 }

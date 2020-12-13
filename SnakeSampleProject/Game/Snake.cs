@@ -22,7 +22,7 @@ namespace SnakeSampleProject
         public Snake(IPublisher publisher, ISubscriptionHandler subscribable)
         {
             _publisher = publisher;
-            _snakeTimer = new Timer(100);
+            _snakeTimer = new Timer(150);
             _snakeTimer.AutoReset = false;
             _snakeTimer.Elapsed += _snakeTimer_Elapsed;
             _subscribable = subscribable;
@@ -40,6 +40,7 @@ namespace SnakeSampleProject
         public void ChangeDirection(SnakeDirection direction)
         {
             Direction = direction;
+            Move();
         }
 
         public void Init(Tile head, int size, SnakeDirection direction)
