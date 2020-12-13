@@ -2,7 +2,7 @@
 
 namespace PubSub
 {
-    class Subscriber
+    public class Subscriber
     {
         public Delegate Action { get; set; }
         public Type Type { get; set; }

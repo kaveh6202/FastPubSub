@@ -10,12 +10,14 @@ namespace PubSub
 
     public abstract class BaseChannel : IChannel
     {
-        private ConcurrentDictionary<string, Subscriber> _subscribers = new ConcurrentDictionary<string, Subscriber>();
-
+        private ConcurrentDictionary<string, Subscriber> _subscribers;
+        public ConcurrentDictionary<string, Subscriber> Subscribers { get { return _subscribers; } }
         public ConfigurationModel Config { get; set; }
+
 
         protected BaseChannel()
         {
+            _subscribers = new ConcurrentDictionary<string, Subscriber>();
             Config = new ConfigurationModel();
         }
 
@@ -137,6 +139,36 @@ namespace PubSub
             {
                 action(input);
             }
+        }
+
+        void IPublisher.Publish<T>(T input)
+        {
+            throw new NotImplementedException();
+        }
+
+        string ISubscriptionHandler.Subscribe(Action<object> callback)
+        {
+            throw new NotImplementedException();
+        }
+
+        string ISubscriptionHandler.Subscribe(object sender, Action<object> callback)
+        {
+            throw new NotImplementedException();
+        }
+
+        string ISubscriptionHandler.Subscribe<T>(Action<T> callback, Func<T, bool> filter)
+        {
+            throw new NotImplementedException();
+        }
+
+        string ISubscriptionHandler.Subscribe<T>(object sender, Action<T> callback, Func<T, bool> filter)
+        {
+            throw new NotImplementedException();
+        }
+
+        void ISubscriptionHandler.UnSubscribe<T>(string key)
+        {
+            throw new NotImplementedException();
         }
 
 
