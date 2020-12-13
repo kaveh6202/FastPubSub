@@ -7,6 +7,12 @@ namespace SnakeSampleProject
     {
         public int PosX { get; set; }
         public int PosY { get; set; }
+        public TileType TileObj { get; set; }
+
+        public bool Equal(int x, int y)
+        {
+            return PosX == x && PosY == y;
+        }
 
         public Tile()
         {
@@ -28,5 +34,13 @@ namespace SnakeSampleProject
         {
             return $"X = {PosX} , Y = {PosY}";
         }
+    }
+
+    public enum TileType
+    {
+        Obstacle,
+        Snake,
+        Reward,
+        Blank
     }
 }

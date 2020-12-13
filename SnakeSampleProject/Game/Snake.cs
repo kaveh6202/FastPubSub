@@ -7,7 +7,7 @@ using System.Timers;
 
 namespace SnakeSampleProject
 {
-    class Snake
+    public class Snake
     {
         private readonly IPublisher _publisher;
         private readonly ISubscriptionHandler _subscribable;
@@ -22,7 +22,7 @@ namespace SnakeSampleProject
         public Snake(IPublisher publisher, ISubscriptionHandler subscribable)
         {
             _publisher = publisher;
-            _snakeTimer = new Timer(250);
+            _snakeTimer = new Timer(100);
             _snakeTimer.AutoReset = false;
             _snakeTimer.Elapsed += _snakeTimer_Elapsed;
             _subscribable = subscribable;
@@ -32,7 +32,7 @@ namespace SnakeSampleProject
         {
             Move();
 
-            var snakeMoveEvent = new SnakeMoved() { Size = SnakeTiles.Count(), Head = SnakeTiles[0] , Direction = Direction };
+            var snakeMoveEvent = new SnakeMoved() { Size = SnakeTiles.Count(), Head = SnakeTiles[0], Direction = Direction };
             _publisher.Publish(snakeMoveEvent);
             _snakeTimer.Start();
         }
@@ -47,26 +47,42 @@ namespace SnakeSampleProject
             Direction = direction;
             SnakeTiles = new List<Tile>();
             var tile = head;
-            for (int i = 0; i < size; i++)
+            Tile previousTile = tile;
+            SnakeTiles.Add(tile);
+            for (int i = 1; i < size; i++)
             {
-                SnakeTiles.Add(tile);
-                tile = direction switch
+
+                var newTile = direction switch
                 {
-                    SnakeDirection.Up => new Tile(tile.PosX, ++tile.PosY),
-                    SnakeDirection.Down => new Tile(tile.PosX, --tile.PosY),
-                    SnakeDirection.Left => new Tile(++tile.PosX, tile.PosY),
-                    SnakeDirection.Right => new Tile(--tile.PosX, tile.PosY),
+                    SnakeDirection.Up => new Tile(SnakeTiles[i - 1].PosX, SnakeTiles[i - 1].PosY + 1),
+                    SnakeDirection.Down => new Tile(SnakeTiles[i - 1].PosX, SnakeTiles[i - 1].PosY - 1),
+                    SnakeDirection.Left => new Tile(SnakeTiles[i - 1].PosX + 1, SnakeTiles[i - 1].PosY),
+                    SnakeDirection.Right => new Tile(SnakeTiles[i - 1].PosX - 1, SnakeTiles[i - 1].PosY),
                     _ => throw new InvalidOperationException()
                 };
+                SnakeTiles.Add(newTile);
             }
 
             _subscribable.Subscribe<GameOver>(item => { _snakeTimer.Stop(); });
             _snakeTimer.Start();
         }
 
+        public void GetBigger()
+        {
+            var newHead = Direction switch
+            {
+                SnakeDirection.Up => new Tile(Head.PosX, Head.PosY - 1),
+                SnakeDirection.Down => new Tile(Head.PosX, Head.PosY + 1),
+                SnakeDirection.Left => new Tile(Head.PosX - 1, Head.PosY),
+                SnakeDirection.Right => new Tile(Head.PosX + 1, Head.PosY),
+                _ => throw new InvalidOperationException()
+            };
+            SnakeTiles.Insert(0, newHead);
+        }
+
         private void Move()
         {
-            for (int i = 1; i < SnakeTiles.Count - 1; i++)
+            for (int i = SnakeTiles.Count - 1; i >= 1 ; i--)
             {
                 SnakeTiles[i] = SnakeTiles[i - 1];
             }
@@ -74,14 +90,15 @@ namespace SnakeSampleProject
             var head = SnakeTiles[0];
             var newHead = Direction switch
             {
-                SnakeDirection.Up => new Tile(head.PosX, --head.PosY),
-                SnakeDirection.Down => new Tile(head.PosX, ++head.PosY),
-                SnakeDirection.Left => new Tile(--head.PosX, head.PosY),
-                SnakeDirection.Right => new Tile(++head.PosX, head.PosY),
+                SnakeDirection.Up => new Tile(head.PosX, head.PosY-1),
+                SnakeDirection.Down => new Tile(head.PosX, head.PosY+1),
+                SnakeDirection.Left => new Tile(head.PosX-1, head.PosY),
+                SnakeDirection.Right => new Tile(head.PosX+1, head.PosY),
                 _ => throw new InvalidOperationException()
             };
             SnakeTiles[0] = newHead;
         }
+
     }
 
     public enum SnakeDirection

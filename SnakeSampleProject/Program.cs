@@ -16,23 +16,36 @@ namespace SnakeSampleProject
             InitLogger();
             InitializePubSubChannels();
 
-            _subscribable.Subscribe<BoardCreated>(item => { 
-                Log.Logger.Information(@$"
-New Game Created -- Enjoy :)
-Board Size - Width : {item.Width} ,Height : {item.Height}
-Snake Head : {item.SnakeHead}
-Snake Size : {item.SnakeSize}
-Reward Location : {item.Reward}
--------------------------------
-");
-            });
+//            _subscribable.Subscribe<BoardCreated>(item => { 
+//                Log.Logger.Information(@$"
+//New Game Created -- Enjoy :)
+//Board Size - Width : {item.Width} ,Height : {item.Height}
+//Snake Head : {item.SnakeHead}
+//Snake Size : {item.SnakeSize}
+//Reward Location : {item.Reward}
+//-------------------------------
+//");
+//            });
 
             var snake = new Snake(_publisher, _subscribable);
             var board = new Board(_publisher, _subscribable, snake, Log.Logger);
-            board.Init(20, 20);
+            board.Init(50, 20);
 
-            Console.ReadLine();
+            while (true)
+            {
+                var key = Console.ReadKey().Key;
+                var direction = key switch
+                {
+                    ConsoleKey.RightArrow => SnakeDirection.Right,
+                    ConsoleKey.LeftArrow => SnakeDirection.Left,
+                    ConsoleKey.UpArrow => SnakeDirection.Up,
+                    ConsoleKey.DownArrow => SnakeDirection.Down,
+                };
+                board.Snake.ChangeDirection(direction);
+            }
+            
         }
+
 
         private static void InitializePubSubChannels()
         {
