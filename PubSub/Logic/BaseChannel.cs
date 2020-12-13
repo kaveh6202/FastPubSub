@@ -10,7 +10,7 @@ namespace PubSub
 
     public abstract class BaseChannel : IChannel
     {
-        protected ConcurrentDictionary<string, Subscriber> _subscribers;
+        private ConcurrentDictionary<string, Subscriber> _subscribers;
         public ConfigurationModel Config { get; set; }
 
 
