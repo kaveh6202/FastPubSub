@@ -9,7 +9,7 @@ Simple and Fast PubSub Utility
 ## Simple factory
 the following exmaple shows how to create a simple factory
 ```c#
-var factory = new PubSubFactory().FireAndForgetCallback().IgnoreCallbackException();
+var factory = new PubSubFactory();
 ```
 
 ## Get ISubscriptionHandler 
@@ -48,7 +48,7 @@ class MyChannel : BaseChannel {}
 
 using factory to init this channel
 ```c#
-var myChannelFactory = new PubSubFactory<MyChannel>().IgnoreCallbackException();
+var myChannelFactory = new PubSubFactory<MyChannel>();
 subscriptionHandler = myChannelFactory.GetSubscriptionHandler();
 var publisher = myChannelFactory.GetPublisher();
 ```
@@ -61,7 +61,7 @@ You can simply register IPublisher and ISubscriptionHandler in your DI-Container
 
 if you did not defined additional channels you can simply register IPubsliher and ISubscriptionHandler with default factory
 ```c#
-services.AddTransient<IPublisher>(p => new factory().IgnoreCallbackException().GetPublisher()));
+services.AddTransient<IPublisher>(p => new factory().GetPublisher()));
 services.AddTransient<ISubscriptionHandler>(p => new factory().GetSubscriptionHandler()));
 ```
 ```c#
@@ -90,7 +90,7 @@ class PublisherClass
 }
 ```
 
-### One More Thing
+### Channel Configuration
 Channels behaviour is configurable
 
 it supports these configurations
@@ -98,5 +98,11 @@ it supports these configurations
 * **FireAndForgetCallback** : if set , the publisher does wait for callback functions to finish - Default behaviour : Waits for the callback function to finish
 * **InvokeCallbackFunctionsSimultaneously** : if set ,  callback functions invoke simultaneously - Default Behaviour : callback functions invoke one by one
 
+```c#
+var factory = new PubSubFactory().IgnoreCallbackException().FireAndForgetCallback();
+var channelFactory = new PubSubFactory<MyChannel>().InvokeCallbackFunctionsSimultaneously();
+```
+
 ***important note*** :
 if **InvokeCallbackFunctionsSimultaneously** is set , the exceptions are automatically ignored
+
