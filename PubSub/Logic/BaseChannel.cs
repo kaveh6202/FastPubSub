@@ -21,11 +21,11 @@ namespace PubSub
 
         #region Subscription
 
-        public virtual string Subscribe<T>(Action<T> callback, Func<T, bool> filter = null) => PrSubscribe(this, callback, typeof(T), filter);
-        public virtual string Subscribe<T>(object sender, Action<T> callback, Func<T, bool>? filter = null) => PrSubscribe(sender, callback, typeof(T), filter);
+        public virtual string Subscribe<T>(Action<T> callback, Func<T, bool> filter = null) => Subscription(this, callback, typeof(T), filter);
+        public virtual string Subscribe<T>(object sender, Action<T> callback, Func<T, bool>? filter = null) => Subscription(sender, callback, typeof(T), filter);
 
-        public virtual string Subscribe(Action<object> callback) => PrSubscribe(this, callback);
-        public virtual string Subscribe(object sender, Action<object> callback) => PrSubscribe(sender, callback);
+        public virtual string Subscribe(Action<object> callback) => Subscription(this, callback);
+        public virtual string Subscribe(object sender, Action<object> callback) => Subscription(sender, callback);
 
 
         public virtual void UnSubscribe<T>(string key)
@@ -37,7 +37,7 @@ namespace PubSub
 
         #region Publish
 
-        public void Publish<T>(T input = default(T))
+        public virtual void Publish<T>(T input = default(T))
         {
 
             RefreshSubsribers();
@@ -49,19 +49,19 @@ namespace PubSub
             {
                 Parallel.ForEach(handlers, h =>
                 {
-                    RunTask(h);
+                    InvokeCallback(h);
                 });
             }
             else
             {
                 foreach (var h in handlers)
                 {
-                    RunTask(h);
+                    InvokeCallback(h);
                 }
             }
 
 
-            void RunTask(Subscriber h)
+            void InvokeCallback(Subscriber h)
             {
                 try
                 {
@@ -93,7 +93,7 @@ namespace PubSub
         #endregion
 
         #region private methods
-        private string PrSubscribe(object sender, Delegate callback, Type? type = null, Delegate? filter = null)
+        private string Subscription(object sender, Delegate callback, Type? type = null, Delegate? filter = null)
         {
             var sub = new Subscriber()
             {
