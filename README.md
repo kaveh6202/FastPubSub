@@ -30,8 +30,8 @@ subscriptionHandler.Subscribe(item => { //do something with recieved message });
 # IOC Friendly
 You can simply register IPublisher and ISubscriptionHandler in your DI-Container and then Inject them in your classes
 ```c#
-services.AddTransient<IPublisher>(p => new factory.GetPublisher()));
-services.AddTransient<ISubscriptionHandler>(p => new factory.GetSubscriptionHandler()));
+services.AddTransient<IPublisher>(p => new factory().GetPublisher()));
+services.AddTransient<ISubscriptionHandler>(p => new factory().GetSubscriptionHandler()));
 ```
 and use it like this
 ```c#
