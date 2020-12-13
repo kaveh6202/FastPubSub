@@ -13,20 +13,20 @@ var factory = new PubSubFactory().FireAndForgetCallback().IgnoreCallbackExceptio
 ```
 
 ## Get ISubscriptionHandler 
-to subscribe for channel messages
+to subscribe for messages
 ```c#
 var subscriptionHandler = factory.GetSubscriptionHandler();
 subscriptionHandler.Subscribe(item => { //do something with recieved message });
 ```
 
 ### Subscription Filters
-filter the messages based on their types
+filter the messages based on type
 ```c#
  subscriptionHandler.Subscribe<SomeType>(this, item => {//do some thing with the message});
 ```
 using filter function for more specific filtering
 ```c#
-subscriptionHandler.Subscribe<SomeType>(this, item => {//do some thing with the message},item=>item.Value == 2);
+subscriptionHandler.Subscribe<SomeType>(this,callback: item => {//do some thing with the message},filter: item=>item.Value == 2);
 ```
 
 
@@ -89,3 +89,14 @@ class PublisherClass
    }
 }
 ```
+
+### One More Thing
+Channels behaviour is configurable
+
+it supports these configurations
+* **IgnoreCallbackException** : if set ,ignores callback function exceptions - Default behaviour : exceptions are thrown
+* **FireAndForgetCallback** : if set , the publisher does wait for callback functions to finish - Default behaviour : Waits for the callback function to finish
+* **InvokeCallbackFunctionsSimultaneously** : if set ,  callback functions invoke simultaneously - Default Behaviour : callback functions invoke one by one
+
+***important note*** :
+if **InvokeCallbackFunctionsSimultaneously** is set , the exceptions are automatically ignored
