@@ -1,6 +1,11 @@
 # FastPubSub
 Simple and Fast PubSub Utility 
 
+## The solution contains 3 projects 
+* **PubSub** is the core of the utility
+* **PubSub.Tests** contains unit tests for some of the functionalities
+* **SnakeSampleProject** is a very simple demonstration of what the util can do
+
 ## Simple factory
 the following exmaple shows how to create a simple factory
 ```c#
