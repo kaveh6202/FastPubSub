@@ -1,4 +1,5 @@
 ﻿using PubSub.Interfaces;
+using PubSub.Model;
 using System;
 using System.Collections.Concurrent;
 using System.Linq;
