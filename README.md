@@ -16,17 +16,21 @@ var factory = new PubSubFactory();
 to subscribe for messages
 ```c#
 var subscriptionHandler = factory.GetSubscriptionHandler();
-subscriptionHandler.Subscribe(item => { //do something with recieved message });
+subscriptionHandler.Subscribe(item => { /*do something with recieved message */ });
 ```
 
 ### Subscription Filters
 filter the messages based on type
 ```c#
- subscriptionHandler.Subscribe<SomeType>(this, item => {//do some thing with the message});
+ subscriptionHandler.Subscribe<SomeType>(this, item => {/*do something with recieved message */});
 ```
+***note :***
+it's good practice to send **subscriber object reference** to Subscribe method , it let the util to keep track of the subscribers aliveness
+
+
 using filter function for more specific filtering
 ```c#
-subscriptionHandler.Subscribe<SomeType>(this,callback: item => {//do some thing with the message},filter: item=>item.Value == 2);
+subscriptionHandler.Subscribe<SomeType>(this,callback: item => {/*do something with recieved message */},filter: item=>item.Value == 2);
 ```
 
 
