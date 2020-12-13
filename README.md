@@ -99,7 +99,7 @@ Channels behaviour is configurable
 
 it supports these configurations
 * **IgnoreCallbackException** : if set ,ignores callback function exceptions - Default behaviour : exceptions are thrown
-* **FireAndForgetCallback** : if set , the publisher does wait for callback functions to finish - Default behaviour : Waits for the callback function to finish
+* **FireAndForgetCallback** : if set , the publisher does not wait for callback functions to finish - Default behaviour : Waits for the callback function to finish
 * **InvokeCallbackFunctionsSimultaneously** : if set ,  callback functions invoke simultaneously - Default Behaviour : callback functions invoke one by one
 
 ```c#
