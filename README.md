@@ -16,17 +16,21 @@ var factory = new PubSubFactory();
 to subscribe for messages
 ```c#
 var subscriptionHandler = factory.GetSubscriptionHandler();
-subscriptionHandler.Subscribe(item => { //do something with recieved message });
+subscriptionHandler.Subscribe(item => { /*do something with recieved message */ });
 ```
 
 ### Subscription Filters
 filter the messages based on type
 ```c#
- subscriptionHandler.Subscribe<SomeType>(this, item => {//do some thing with the message});
+ subscriptionHandler.Subscribe<SomeType>(this, item => {/*do something with recieved message */});
 ```
+***note :***
+it's good practice to send **subscriber object reference** to Subscribe method , it let the util to keep track of the subscribers aliveness
+
+
 using filter function for more specific filtering
 ```c#
-subscriptionHandler.Subscribe<SomeType>(this,callback: item => {//do some thing with the message},filter: item=>item.Value == 2);
+subscriptionHandler.Subscribe<SomeType>(this,callback: item => {/*do something with recieved message */},filter: item=>item.Value == 2);
 ```
 
 
@@ -95,7 +99,7 @@ Channels behaviour is configurable
 
 it supports these configurations
 * **IgnoreCallbackException** : if set ,ignores callback function exceptions - Default behaviour : exceptions are thrown
-* **FireAndForgetCallback** : if set , the publisher does wait for callback functions to finish - Default behaviour : Waits for the callback function to finish
+* **FireAndForgetCallback** : if set , the publisher does not wait for callback functions to finish - Default behaviour : Waits for the callback function to finish
 * **InvokeCallbackFunctionsSimultaneously** : if set ,  callback functions invoke simultaneously - Default Behaviour : callback functions invoke one by one
 
 ```c#
