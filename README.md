@@ -84,10 +84,10 @@ services.AddTransient<IPubSubFactory<MyChannel>>(p => new factory<MyChannel>()))
 services.AddTransient<IPubSubFactory<MyOtherChannel>>(p => new factory<MyOtherChannel>()));
 ```
 ```c#
-class PublisherClass
+class SubscriberClass
 {
    private readonly ISubscriptionHandler _subHandler;
-   PublisherClass(IPubSubFactory<MyChannel> channelFactory)
+   SubscriberClass(IPubSubFactory<MyChannel> channelFactory)
    {
       _subHandler = channelFactory.GetSubscriptionHandler();
    }
